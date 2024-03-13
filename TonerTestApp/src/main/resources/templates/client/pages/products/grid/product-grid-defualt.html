@@ -510,8 +510,9 @@
                             <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
                                 Price
                             </p>
-
-                            <div id="product-price-range" data-slider-color="info"></div>
+                            <div id="product-price-range" data-slider-color="info"
+                                 class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                            </div>
                             <div class="formCost d-flex gap-2 align-items-center mt-3">
                                 <input
                                         class="form-control form-control-sm"
@@ -1142,16 +1143,24 @@
     var chooseSize = [];
     window.onload = function () {
         loadPage(0);
+        chooseColor = [];
+        chooseSize = [];
     }
 
     async function loadPage(pageNumber) {
-        var url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + 0 + "/" + "null";
+        var url = "/api/client/product/page/" + pageNumber + "/" + "null";
+        var requet = requestConfig(chooseColor,chooseSize);
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requet)
         });
         page = pageNumber;
         var result = await response.json();
         var list = result.content;
+        console.log(list);
         var totalPage = result.totalPages;
         var number = result.number;
         var main = '';
@@ -1296,6 +1305,17 @@
         }
     }
 
+    function requestConfig(arrColor,arrSize){
+        let filterRequest = {};
+        if(arrColor === [] || arrSize !== []){
+            filterRequest = {listColors: null, listSizes: chooseSize};
+        } else if (arrColor !== [] || arrSize === []){
+            filterRequest = {listColors: chooseColor, listSizes: null};
+        } else {
+            filterRequest = {listColors: null, listSizes: null} ;
+        }
+        return filterRequest;
+    }
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -1467,283 +1487,283 @@
         console.log("4.colorFilter: " + colorFilter);
         console.log("5.sizeFilter: " + sizeFilter);
         var url;
-        if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             loadPage(page);
         }
         //search
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("keyword 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("keyword page");
         }
         //search+price
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+priceMin 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+priceMin page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+priceMax 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+priceMax page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+price 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("search+price page");
         }
         //search+color
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search + color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search + color page");
         }
         //search+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search + size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search + size page");
         }
         //search+color+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search + color + size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search + color + size page");
         }
         //search+price+color
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+priceMin+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+priceMin+color page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+priceMax+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+priceMax+color page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+price+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("search+price+color page");
         }
         //search+price+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMin+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMin+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMax+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMax+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+price+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("search+price+size page");
         }
         //search+price+color+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMin+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMin+color+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMax+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+priceMax+color+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+price+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("search+price+color+size page");
         }
         //price
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("priceMin 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("priceMin page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("priceMax 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("priceMax page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("price 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
             console.log(url);
             console.log("price page");
         }
         //price+color
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("priceMin+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("priceMin+color page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("priceMax+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("priceMax+color page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("price+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("price+color page");
         }
         //price+size
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("priceMin+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("priceMin+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("priceMax+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("priceMax+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("price+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("price+size page");
         }
         //price+color+size
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("priceMin+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("priceMin+color+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("priceMax+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length>0 && colorFilter !== '') {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && colorFilter !== '') {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + colorFilter;
             console.log(url);
             console.log("priceMax+color+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("price+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("price+color+size page");
         }
         //color
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length===0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
             console.log(url);
             console.log("color page");
         }
         //size
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length===0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
             console.log(url);
             console.log("size page");
         }
         //color+size
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length>0 && chooseSize.length>0) {
+        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
             url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
             console.log(url);
             console.log("color+size page");
@@ -1899,9 +1919,10 @@
     function chooseFilterColor(id) {
         // Kiểm tra xem ID đã được chọn có trong danh sách hay không?
         var index = chooseColor.indexOf(id);
+        var numberParse = parseInt(id);
         if (index === -1) {
             // Nếu không tìm thấy, thêm ID vào danh sách!
-            chooseColor.push(id);
+            chooseColor.push(numberParse);
             console.log(chooseColor);
         } else {
             // Nếu tìm thấy, loại bỏ ID khỏi danh sách!
