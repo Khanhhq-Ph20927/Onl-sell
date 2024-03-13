@@ -216,18 +216,18 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
     Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd, @Param("color") String color, @Param("size") String size);
 
     //color
-    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (:color is null or spct.ms.id=:color)")
-    Page<SanPham> filterColor(Pageable pageable, @Param("color") String color);
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE spct.ms.id in :color")
+    Page<SanPham> filterColor(Pageable pageable, @Param("color") List<Integer> color);
 
     //size
-    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (:size is null or spct.size=:size)")
-    Page<SanPham> filterSize(Pageable pageable, @Param("size") String size);
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE spct.size in :size")
+    Page<SanPham> filterSize(Pageable pageable, @Param("size") List<String> size);
 
     //color+size
-    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (:color is null or spct.ms.id=:color)AND(:size is null or spct.size=:size)")
-    Page<SanPham> filterColorAndSize(Pageable pageable, @Param("color") String color, @Param("size") String size);
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (spct.ms.id in :color) AND (spct.size in :size)")
+    Page<SanPham> filterColorAndSize(Pageable pageable, @Param("color") List<Integer> color, @Param("size") List<String> size);
 
-    @Query("SELECT distinct sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (:keyword is null or sp.tenSP like %:keyword%)AND(:color is null or spct.ms.id in :color)AND(:size is null or spct.size in :size)")
-    Page<SanPham> SearchfilterColorAndSizeIn(Pageable pageable, @Param("keyword") String keyword, @Param("color") List<String> color, @Param("size") List<String> size);
+    @Query("SELECT distinct sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (sp.tenSP like %:keyword%) AND (spct.ms.id in :color) AND (spct.size in :size)")
+    Page<SanPham> SearchfilterColorAndSizeIn(Pageable pageable, @Param("keyword") String keyword, @Param("color") List<Integer> color, @Param("size") List<String> size);
 
 }

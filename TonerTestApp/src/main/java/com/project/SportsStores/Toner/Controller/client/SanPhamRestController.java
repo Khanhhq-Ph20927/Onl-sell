@@ -47,35 +47,43 @@ public class SanPhamRestController {
                                                   @PathVariable("keyWord") String keyWord,
                                                   @RequestBody FilterRequest filterRequest) {
         Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 8, Sort.by("ngayTao").descending());
-        Page<SanPham> page = service.pageClient(pageable);
-        System.out.println("FilterRequest:+" + filterRequest.toString());
+//        Page<SanPham> page = service.pageClient(pageable);
+        Page<SanPham> page = null;
+        if(filterRequest.getListColors() != null) {
+            for (Integer result : filterRequest.getListColors()
+            ) {
+                System.out.println("result :" + result);
+            }
+        }
+
+        if(filterRequest.getListSizes() != null) {
+            for (String result : filterRequest.getListSizes()
+            ) {
+                System.out.println("result :" + result);
+            }
+        }
+        //2 done, 1 done , 3 done, 4 done , 5 done
+
         //search
+
         if (!keyWord.equals("null") && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)) {
             page = service.search(pageable, keyWord);
-//            if (FilterRequest.getListColors() == null && FilterRequest.getListSizes() == null){
-//                System.out.println("null");
-//            }
-//            for (int i = 0; i < FilterRequest.getListColors().size(); i++) {
-//                System.out.println(FilterRequest.getListColors().get(i));
-//            }
-//            for (int i = 0; i < FilterRequest.getListSizes().size(); i++) {
-//                System.out.println(FilterRequest.getListSizes().get(i));
-//            }
             System.out.println(keyWord);
-            System.out.println("keyWord:=" + 1);
+            System.out.println("Case " + 1);
 
         } else if (keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
             page = service.filterColor(pageable, filterRequest.getListColors());
-            System.out.println("keyWord:=" + 2);
-        } else if (keyWord.equals("null") && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
+            System.out.println("Case " + 2);
+        }
+        else if (keyWord.equals("null") && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
             page = service.filterSize(pageable, filterRequest.getListSizes());
-            System.out.println("keyWord:=" + 3);
+            System.out.println("Case " + 3);
         } else if (keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
             page = service.filterColorAndSize(pageable, filterRequest.getListColors(), filterRequest.getListSizes());
-            System.out.println("keyWord:=" + 4);
+            System.out.println("Case " + 4);
         } else if (!keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
             page = service.searchfilterColorAndSizeIn(pageable, keyWord, filterRequest.getListColors(), filterRequest.getListSizes());
-            System.out.println("keyWord:=" + 5);
+            System.out.println("Case " + 5);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }

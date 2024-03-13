@@ -92,12 +92,12 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public Page<SanPham> searchAndFilterColor(Pageable pageable, String keyword,  List<String> color) {
+    public Page<SanPham> searchAndFilterColor(Pageable pageable, String keyword, List<String> color) {
         List<Page<SanPham>> pages = new ArrayList<>();
 
         // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
         for (String a : color) {
-            Page<SanPham> page = rp.searchAndFilterColor(pageable, keyword,a);
+            Page<SanPham> page = rp.searchAndFilterColor(pageable, keyword, a);
             pages.add(page);
         }
         // Kết hợp các trang từ danh sách thành một trang duy nhất
@@ -106,16 +106,16 @@ public class SanPhamServiceImpl implements SanPhamService {
             combinedResults.addAll(page.getContent());
         }
 
-        return new PageImpl<>(combinedResults, pageable,combinedResults.size());
+        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
     }
 
     @Override
-    public Page<SanPham> searchAndFilterSize(Pageable pageable, String keyword,  List<String> size) {
+    public Page<SanPham> searchAndFilterSize(Pageable pageable, String keyword, List<String> size) {
         List<Page<SanPham>> pages = new ArrayList<>();
 
         // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
         for (String a : size) {
-            Page<SanPham> page = rp.searchAndFilterSize(pageable, keyword,a);
+            Page<SanPham> page = rp.searchAndFilterSize(pageable, keyword, a);
             pages.add(page);
         }
         // Kết hợp các trang từ danh sách thành một trang duy nhất
@@ -123,16 +123,16 @@ public class SanPhamServiceImpl implements SanPhamService {
         for (Page<SanPham> page : pages) {
             combinedResults.addAll(page.getContent());
         }
-        return new PageImpl<>(combinedResults, pageable,combinedResults.size());
+        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
     }
 
     @Override
-    public Page<SanPham> searchAndFilterColorAndSize(Pageable pageable, String keyword,  List<String> color,  List<String> size) {
+    public Page<SanPham> searchAndFilterColorAndSize(Pageable pageable, String keyword, List<String> color, List<String> size) {
         List<Page<SanPham>> pages = new ArrayList<>();
         // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
         for (String a : color) {
             for (String b : size) {
-                Page<SanPham> page = rp.searchAndFilterColorAndSize(pageable, keyword,a,b);
+                Page<SanPham> page = rp.searchAndFilterColorAndSize(pageable, keyword, a, b);
                 pages.add(page);
             }
         }
@@ -141,7 +141,7 @@ public class SanPhamServiceImpl implements SanPhamService {
         for (Page<SanPham> page : pages) {
             combinedResults.addAll(page.getContent());
         }
-        return new PageImpl<>(combinedResults, pageable,combinedResults.size());
+        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
     }
 
     @Override
@@ -250,65 +250,24 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public Page<SanPham> filterColor(Pageable pageable, List<String> color) {
-        List<Page<SanPham>> pages = new ArrayList<>();
-
-        // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
-        for (String a : color) {
-            Page<SanPham> page = rp.filterColor(pageable, a);
-            pages.add(page);
-        }
-        // Kết hợp các trang từ danh sách thành một trang duy nhất
-        List<SanPham> combinedResults = new ArrayList<>();
-        for (Page<SanPham> page : pages) {
-            combinedResults.addAll(page.getContent());
-        }
-
-        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
+    public Page<SanPham> filterColor(Pageable pageable, List<Integer> color) {
+        return rp.filterColor(pageable, color);
     }
 
     @Override
     public Page<SanPham> filterSize(Pageable pageable, List<String> size) {
-        List<Page<SanPham>> pages = new ArrayList<>();
-
-        // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
-        for (String a : size) {
-            Page<SanPham> page = rp.filterSize(pageable, a);
-            pages.add(page);
-        }
-        // Kết hợp các trang từ danh sách thành một trang duy nhất
-        List<SanPham> combinedResults = new ArrayList<>();
-        for (Page<SanPham> page : pages) {
-            combinedResults.addAll(page.getContent());
-        }
-
-        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
+        return rp.filterSize(pageable, size);
     }
 
     @Override
-    public Page<SanPham> filterColorAndSize(Pageable pageable, List<String> color, List<String> size) {
-        List<Page<SanPham>> pages = new ArrayList<>();
-        // Duyệt qua mỗi màu sắc và gọi rp.filterColor() cho mỗi màu
-        for (String a : color) {
-            Page<SanPham> page = rp.filterColor(pageable, a);
-            pages.add(page);
-        }
-        for (String b : size) {
-            Page<SanPham> page = rp.filterSize(pageable, b);
-            pages.add(page);
-        }
-        // Kết hợp các trang từ danh sách thành một trang duy nhất
-        List<SanPham> combinedResults = new ArrayList<>();
-        for (Page<SanPham> page : pages) {
-            combinedResults.addAll(page.getContent());
-        }
+    public Page<SanPham> filterColorAndSize(Pageable pageable, List<Integer> color, List<String> size) {
 
-        return new PageImpl<>(combinedResults, pageable, combinedResults.size());
+        return rp.filterColorAndSize(pageable, color, size);
     }
 
     @Override
-    public Page<SanPham> searchfilterColorAndSizeIn(Pageable pageable, String keyword, List<String> color, List<String> size) {
-        return rp.SearchfilterColorAndSizeIn(pageable,keyword,color,size);
+    public Page<SanPham> searchfilterColorAndSizeIn(Pageable pageable, String keyword, List<Integer> color, List<String> size) {
+        return rp.SearchfilterColorAndSizeIn(pageable, keyword, color, size);
     }
 
     @Override

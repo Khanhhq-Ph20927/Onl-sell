@@ -3,7 +3,6 @@ package com.project.SportsStores.Toner.Service;
 import com.project.SportsStores.Toner.Model.SanPham;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -133,14 +132,14 @@ public interface SanPhamService {
     Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, String priceStart, String priceEnd, String color, String size);
 
     //color
-    Page<SanPham> filterColor(Pageable pageable, List<String> color);
+    Page<SanPham> filterColor(Pageable pageable, List<Integer> color);
 
     //size
     Page<SanPham> filterSize(Pageable pageable, List<String> size);
 
     //color+size
-    Page<SanPham> filterColorAndSize(Pageable pageable, List<String> color, List<String> size);
+    Page<SanPham> filterColorAndSize(Pageable pageable, List<Integer> color, List<String> size);
 
-    Page<SanPham> searchfilterColorAndSizeIn(Pageable pageable, String keyword, List<String> color, List<String> size);
+    Page<SanPham> searchfilterColorAndSizeIn(Pageable pageable, String keyword, List<Integer> color, List<String> size);
 
 }
