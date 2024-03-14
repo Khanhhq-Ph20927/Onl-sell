@@ -1,6 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="light" data-footer="dark">
 <head th:replace="client/fragments/head::head"></head>
+<style>
+    /* Import Google Font - Poppins */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+    /* Định dạng phần nhập giá */
+    .price-input {
+        width: 100%;
+        display: flex;
+        margin: 30px 0 35px;
+    }
+
+    .price-input .field {
+        display: flex;
+        width: 100%;
+        height: 45px;
+        align-items: center;
+    }
+
+    .field input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        font-size: 19px;
+        margin-left: 12px;
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid #999;
+        -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .price-input .separator {
+        width: 130px;
+        display: flex;
+        font-size: 19px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Định dạng thanh trượt */
+    .slider {
+        height: 5px;
+        position: relative;
+        background: #ddd;
+        border-radius: 5px;
+    }
+
+    .slider .progress {
+        height: 100%;
+        left: 0%; /* Cài đặt mặc định cho thanh trượt */
+        right: 0%; /* Cài đặt mặc định cho thanh trượt */
+        position: absolute;
+        border-radius: 5px;
+        background: #17a2b8;
+    }
+
+    /* Định dạng phần input range */
+    .range-input {
+        position: relative;
+    }
+
+    .range-input input {
+        position: absolute;
+        width: 100%;
+        height: 5px;
+        top: -5px; /* Để input range nằm trên thanh trượt */
+        background: none;
+        pointer-events: none;
+        -webkit-appearance: none; /* Loại bỏ giao diện mặc định trên WebKit */
+        -moz-appearance: none; /* Loại bỏ giao diện mặc định trên Firefox */
+    }
+
+    /* Định dạng nút điều khiển trên input range */
+    input[type="range"]::-webkit-slider-thumb {
+        height: 17px;
+        width: 17px;
+        border-radius: 100%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -webkit-appearance: none; /* Loại bỏ giao diện mặc định trên WebKit */
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        height: 17px;
+        width: 17px;
+        border: none;
+        border-radius: 100%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -moz-appearance: none; /* Loại bỏ giao diện mặc định trên Firefox */
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+</style>
 <body>
 <div th:replace="client/fragments/header::header"></div>
 <!--cart -->
@@ -378,48 +477,53 @@
                             <div class="flex-grow-1">
                                 <h5 class="fs-16">Filters</h5>
                             </div>
-                            <div class="flex-shrink-0">
+                            <div class="flex-shrink-3">
                                 <button onclick="ClearAll()"
-                                        class="btn btn-hover text-decoration-underline link-secondary" id="clearall"
+                                        class="btn btn-sm btn-info btn-hover" id="clearall"
                                 >Clear All
-                                </button
-                                >
+                                </button>
                             </div>
                         </div>
-
-                        <div class="search-box">
-                            <input
-                                    type="text"
-                                    class="form-control"
-                                    id="searchProductList"
-                                    autocomplete="off"
-                                    placeholder="Search Products..."
-                                    onchange="searchProduct()"
-                            />
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
+                        <!--                        <div class="search-box">-->
+                        <!--                            <input-->
+                        <!--                                    type="text"-->
+                        <!--                                    class="form-control"-->
+                        <!--                                    id="searchProductList"-->
+                        <!--                                    autocomplete="off"-->
+                        <!--                                    placeholder="Search Products..."-->
+                        <!--                                    onchange="searchProduct()"-->
+                        <!--                            />-->
+                        <!--                            <i class="ri-search-line search-icon"></i>-->
+                        <!--                        </div>-->
                     </div>
 
                     <div class="accordion accordion-flush filter-accordion">
-
                         <div class="card-body border-bottom">
                             <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
                                 Price
                             </p>
-                            <div id="product-price-range" data-slider-color="info"
-                                 class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                            <div class="slider">
+                                <div class="progress"></div>
                             </div>
-                            <div class="formCost d-flex gap-2 align-items-center mt-3">
+                            <div class="range-input">
+                                <input type="range" class="range-min" step="10000"
+                                       onchange="searchProduct()">
+                                <input type="range" class="range-max" step="10000"
+                                       onchange="searchProduct()">
+                            </div>
+                            <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
                                 <input
                                         class="form-control form-control-sm"
                                         type="text"
                                         id="minCost"
+                                        disabled
                                 />
                                 <span class="fw-semibold text-muted">to</span>
                                 <input
                                         class="form-control form-control-sm"
                                         type="text"
                                         id="maxCost"
+                                        disabled
                                 />
                             </div>
                         </div>
@@ -795,6 +899,7 @@
 </section>
 <div th:replace="client/fragments/footer::footer"></div>
 <div th:replace="client/fragments/script::script"></div>
+
 <script>
     //lưu page
     var page;
@@ -806,19 +911,26 @@
     var productDetail;
     var chooseColor = [];
     var chooseSize = [];
+    var dataPriceMax;
 
     window.onload = function () {
         loadPage(0);
         chooseColor = [];
         chooseSize = [];
         selectedProduct = undefined;
+        range();
     }
 
     async function loadPage(pageNumber) {
+        var priceMax = "/api/client/product/priceMax";
+        const responsePriceMax = await fetch(priceMax, {
+            method: 'GET',
+        });
+        var resultPriceMax = await responsePriceMax.json();
+        dataPriceMax = resultPriceMax;
         var sort = document.getElementById('sort-elem').value;
-        var url = "/api/client/product/page/" + pageNumber + "/" + "null" + "?sort="+sort;
+        var url = "/api/client/product/page/" + pageNumber + "/" + 0 + "/" + resultPriceMax + "?sort=" + sort;
         var request = requestConfig(chooseColor, chooseSize);
-        console.log(request);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -829,7 +941,6 @@
         page = pageNumber;
         var result = await response.json();
         var list = result.content;
-        console.log(list);
         var totalPage = result.totalPages;
         var number = result.number;
         var main = '';
@@ -1094,16 +1205,26 @@
     }
 
     function ClearAll() {
-        // var keyword = document.getElementById("searchProductList").value.trim().toLowerCase();
-        // var priceMin = document.getElementById("minCost").value.trim().toLowerCase();
-        // var priceMax = document.getElementById("maxCost").value.trim().toLowerCase();
-        // // var colorFilter = document.getElementById("color-filter").value;
-        // // var sizeFilter = document.getElementById("size-filter").value;
-        // var colorFilter = 0;
-        // var sizeFilter = '';
-        // keyword = '';
-        // priceMin = '';
-        // priceMax = '';
+        document.getElementById("maxCost").value = dataPriceMax;
+        document.getElementById("minCost").value = 0;
+        document.querySelector('.range-input input.range-min').value = 0;
+        document.querySelector('.range-input input.range-max').value = dataPriceMax;
+        var rangeInput = document.querySelectorAll(".range-input input");
+        var range = document.querySelector(".slider .progress");
+        rangeInput.forEach(() => {
+            range.style.left = 0 * 100 + "%";
+            range.style.right = 0 * 100 + "%";
+        });
+        chooseColor = [];
+        chooseSize = [];
+        var inputCheckbox = document.querySelectorAll('input[type=checkbox]');
+        var inputRadio = document.querySelectorAll('input[type=radio]');
+        inputCheckbox.forEach(function (input) {
+            input.checked = false;
+        })
+        inputRadio.forEach(function (input) {
+            input.checked = false;
+        })
     }
 
     async function AddToCart() {
@@ -1116,7 +1237,6 @@
             alert("Chưa chọn size !");
         } else {
             product = {idSP: selectedProduct, ms: selectedProductDetailColor, size: selectedProductDetailSize};
-            console.log(product);
             var url = '/api/client/cart_detail/add';
             const response = await fetch(url, {
                 method: 'POST',
@@ -1135,316 +1255,100 @@
     }
 
     async function searchProduct(pageNumber) {
-        var keyword = document.getElementById("searchProductList").value.trim().toLowerCase();
-        var priceMin = document.getElementById("minCost").value.trim().toLowerCase();
-        var priceMax = document.getElementById("maxCost").value.trim().toLowerCase();
-        var checkboxColorFilter;
-        var checkboxSizeFilter;
-        //=>Color
-        // Lấy tất cả các phần tử input checkbox trong danh sách
-        var checkboxesColor = document.querySelectorAll('#color-filter input[type="checkbox"]');
-        // Lọc các phần tử được chọn
-        var checkedCheckboxesColor = Array.from(checkboxesColor).filter(checkbox => checkbox.checked);
-        // Lấy giá trị của các phần tử được chọn
-        var colorFilter = checkedCheckboxesColor.map(checkbox => checkbox.value);
-        //=>Size
-        var checkboxesSize = document.querySelectorAll('#size-filter input[type="checkbox"]');
-        // Lọc các phần tử được chọn
-        var checkedCheckboxesSize = Array.from(checkboxesSize).filter(checkbox => checkbox.checked);
-        // Lấy giá trị của các phần tử được chọn
-        var sizeFilter = checkedCheckboxesSize.map(checkbox => checkbox.value);
-
-
+        var pathPriceMax = "/api/client/product/priceMax";
+        const responsePriceMax = await fetch(pathPriceMax, {
+            method: 'GET',
+        });
+        var resultPriceMax = await responsePriceMax.json();
+        var minCost = document.getElementById("minCost").value;
+        var maxCost = document.getElementById("maxCost").value;
+        var sort = document.getElementById('sort-elem').value;
+        var request = requestConfig(chooseColor, chooseSize);
         //Log input
-        console.log("1.keyword: " + keyword);
-        console.log("2.priceMin: " + priceMin);
-        console.log("3.priceMax: " + priceMax);
-        console.log("4.colorFilter: " + colorFilter);
-        console.log("5.sizeFilter: " + sizeFilter);
+        console.log("1.priceMin: " + minCost);
+        console.log("2.priceMax: " + maxCost);
+        console.log("3.requestConfig: " + chooseColor + chooseSize);
         var url;
-        if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
+        //default
+        if (pageNumber === undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length === 0 && chooseSize.length === 0) {
             loadPage(page);
         }
-        //search
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("keyword 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("keyword page");
-        }
-        //search+price
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+priceMin 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+priceMin page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+priceMax 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+priceMax page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+price 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("search+price page");
-        }
-        //search+color
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search + color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search + color page");
-        }
-        //search+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search + size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search + size page");
-        }
-        //search+color+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search + color + size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search + color + size page");
-        }
-        //search+price+color
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+priceMin+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+priceMin+color page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+priceMax+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+priceMax+color page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+price+color 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("search+price+color page");
-        }
-        //search+price+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMin+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMin+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMax+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMax+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+price+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+price+size page");
-        }
-        //search+price+color+size
-        else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMin+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMin+color+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMax+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+priceMax+color+size page");
-        } else if (pageNumber === undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+price+color+size 0");
-        } else if (pageNumber !== undefined && keyword !== '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + keyword + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("search+price+color+size page");
-        }
-        //price
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("priceMin 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("priceMin page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("priceMax 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("priceMax page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("price 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + "null";
-            console.log(url);
-            console.log("price page");
-        }
-        //price+color
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("priceMin+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("priceMin+color page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("priceMax+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("priceMax+color page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("price+color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + "null";
-            console.log(url);
-            console.log("price+color page");
-        }
-        //price+size
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMin+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMin+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMax+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMax+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("price+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + 0 + "/" + sizeFilter;
-            console.log(url);
-            console.log("price+size page");
-        }
-        //price+color+size
-        else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMin+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMin+color+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("priceMax+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax !== '' && chooseColor.length > 0 && colorFilter !== '') {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + priceMax + "/" + colorFilter + "/" + colorFilter;
-            console.log(url);
-            console.log("priceMax+color+size page");
-        } else if (pageNumber === undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("price+color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin !== '' && priceMax !== '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + priceMin + "/" + priceMax + "/" + colorFilter + "/" + sizeFilter;
-            console.log(url);
-            console.log("price+color+size page");
-        }
         //color
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
+        else if (pageNumber === undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length > 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("color 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length === 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + "null";
+        } else if (pageNumber !== undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length > 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("color page");
         }
         //size
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
+        else if (pageNumber === undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length === 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length === 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + 0 + "/" + sizeFilter;
+        } else if (pageNumber !== undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length === 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("size page");
         }
         //color+size
-        else if (pageNumber === undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + 0 + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
+        else if (pageNumber === undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length > 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("color+size 0");
-        } else if (pageNumber !== undefined && keyword === '' && priceMin === '' && priceMax === '' && chooseColor.length > 0 && chooseSize.length > 0) {
-            url = "/api/client/product/page/" + pageNumber + "/" + "null" + "/" + "null" + "/" + "null" + "/" + colorFilter + "/" + sizeFilter;
+        } else if (pageNumber !== undefined && minCost === 0 && maxCost === resultPriceMax && chooseColor.length > 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + resultPriceMax + "?sort=" + sort;
             console.log(url);
             console.log("color+size page");
         }
+        //price
+        else if (pageNumber === undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length === 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price 0");
+        } else if (pageNumber !== undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length === 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price page");
+        }
+        //price+color
+        else if (pageNumber === undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length > 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+color 0");
+        } else if (pageNumber !== undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length > 0 && chooseSize.length === 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+color page");
+        }
+        //price+size
+        else if (pageNumber === undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length === 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+size 0");
+        } else if (pageNumber !== undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length === 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+size page");
+        }
+        //price+color+size
+        else if (pageNumber === undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length > 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + 0 + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+color+size 0");
+        } else if (pageNumber !== undefined && (minCost !== 0 && maxCost !== resultPriceMax || minCost !== 0 && maxCost === resultPriceMax || minCost === 0 && maxCost !== resultPriceMax) && chooseColor.length > 0 && chooseSize.length > 0) {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" + maxCost + "?sort=" + sort;
+            console.log(url);
+            console.log("price+color+size page");
+        }
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
         });
         page = pageNumber;
         var result = await response.json();
@@ -1624,6 +1528,88 @@
             loadPage(0);
         }
     }
+
+    function range() {
+        var rangeInput = document.querySelectorAll(".range-input input");
+        var priceInput = document.querySelectorAll(".price-input input");
+        var range = document.querySelector(".slider .progress");
+
+        let priceGap = 0;
+
+        // Hàm để gọi API và cập nhật giá trị max của input range
+        function updateRangeMaxFromAPI() {
+            // Gọi API từ Spring Boot
+            fetch('/api/client/product/priceMax')
+                .then(response => response.json())
+                .then(data => {
+                    // Lấy giá trị max từ phản hồi của API
+                    var maxFromAPI = data;
+                    console.log(data);
+                    // Cập nhật giá trị max của input range
+                    var rangeInputMin = document.querySelector('.range-input input.range-min');
+                    var rangeInputMax = document.querySelector('.range-input input.range-max');
+                    var minCost = document.getElementById("minCost");
+                    var maxCost = document.getElementById("maxCost");
+                    //Set min
+                    rangeInputMax.min = 0;
+                    rangeInputMax.max = maxFromAPI;
+                    //Set max
+                    rangeInputMin.min = 0;
+                    rangeInputMin.max = maxFromAPI;
+                    // Cập nhật giá trị mặc định của input range nếu cần
+                    // Ví dụ: Đặt giá trị mặc định là giá trị max từ API
+                    //Set min
+                    rangeInputMin.value = 0;
+                    minCost.value = 0;
+                    //Set max
+                    rangeInputMax.value = maxFromAPI;
+                    maxCost.value = maxFromAPI;
+
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Gọi hàm để cập nhật giá trị max từ API khi cần
+        updateRangeMaxFromAPI();
+
+        priceInput.forEach((input) => {
+            input.addEventListener("input", (e) => {
+                let minPrice = parseInt(priceInput[0].value),
+                    maxPrice = parseInt(priceInput[1].value);
+
+                if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
+                    if (e.target.id === "minCost") {
+                        rangeInput[0].value = minPrice;
+                        range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+                    } else {
+                        rangeInput[1].value = maxPrice;
+                        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                    }
+                }
+            });
+        });
+
+        rangeInput.forEach((input) => {
+            input.addEventListener("input", (e) => {
+                let minVal = parseInt(rangeInput[0].value),
+                    maxVal = parseInt(rangeInput[1].value);
+
+                if (maxVal - minVal < priceGap) {
+                    if (e.target.className === "range-min") {
+                        rangeInput[0].value = maxVal - priceGap;
+                    } else {
+                        rangeInput[1].value = minVal + priceGap;
+                    }
+                } else {
+                    priceInput[0].value = minVal;
+                    priceInput[1].value = maxVal;
+                    range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                }
+            });
+        });
+    }
+
 </script>
 </body>
 </html>

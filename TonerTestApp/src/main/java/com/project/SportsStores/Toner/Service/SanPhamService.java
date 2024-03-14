@@ -3,6 +3,7 @@ package com.project.SportsStores.Toner.Service;
 import com.project.SportsStores.Toner.Model.SanPham;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -47,99 +48,27 @@ public interface SanPhamService {
     //Khánh
     Page<SanPham> pageClient(Pageable pageable);
 
-    //search
-    Page<SanPham> search(Pageable pageable, String keyword);
-
-    //search+priceMin
-    Page<SanPham> searchAndPriceMin(Pageable pageable, String keyword, String priceStart);
-
-    //search+priceMax
-    Page<SanPham> searchAndPriceMax(Pageable pageable, String keyword, String priceEnd);
-
-    //search+price
-    Page<SanPham> searchAndPrice(Pageable pageable, String keyword, String priceStart, String priceEnd);
-
-    //search+color
-    Page<SanPham> searchAndFilterColor(Pageable pageable, String keyword, List<String> color);
-
-    //search+size
-    Page<SanPham> searchAndFilterSize(Pageable pageable, String keyword, List<String> size);
-
-    //search+color+size
-    Page<SanPham> searchAndFilterColorAndSize(Pageable pageable, String keyword, List<String> color, List<String> size);
-
-    //search+priceMin+color
-    Page<SanPham> searchAndPriceMinAndFilterColor(Pageable pageable, String keyword, String priceStart, String color);
-
-    //search+priceMax+color
-    Page<SanPham> searchAndPriceMaxAndFilterColor(Pageable pageable, String keyword, String priceEnd, String color);
-
-    //search+price+color
-    Page<SanPham> searchAndPriceAndFilterColor(Pageable pageable, String keyword, String priceStart, String priceEnd, String color);
-
-    //search+priceMin+size
-    Page<SanPham> searchAndPriceMinAndFilterSize(Pageable pageable, @Param("keyword") String keyword, @Param("priceStart") String priceStart, @Param("size") String size);
-
-    //search+priceMax+size
-    Page<SanPham> searchAndPriceMaxAndFilterSize(Pageable pageable, @Param("keyword") String keyword, @Param("priceEnd") String priceEnd, @Param("size") String size);
-
-    //search+price+size
-    Page<SanPham> searchAndPriceAndFilterSize(Pageable pageable, String keyword, String priceStart, String priceEnd, String size);
-
-    //search+priceMin+color+size
-    Page<SanPham> searchAndPriceMinAndFilterColorAndSize(Pageable pageable, String keyword, String priceStart, String color, String size);
-
-    //search+priceMax+color+size
-    Page<SanPham> searchAndPriceMaxAndFilterColorAndSize(Pageable pageable, String keyword, String priceEnd, String color, String size);
-
-    //search+price+color+size
-    Page<SanPham> searchAndPriceAndFilterColorAndSize(Pageable pageable, String keyword, String priceStart, String priceEnd, String color, String size);
-
-    //priceMin
-    Page<SanPham> priceMin(Pageable pageable, String priceStart);
-
-    //priceMax
-    Page<SanPham> priceMax(Pageable pageable, String priceEnd);
-
     //price
-    Page<SanPham> price(Pageable pageable, String priceStart, String priceEnd);
-
-    //priceMin+color
-    Page<SanPham> priceMinAndFilterColor(Pageable pageable, String priceStart, String color);
-
-    //priceMax+color
-    Page<SanPham> priceMaxAndFilterColor(Pageable pageable, String priceEnd, String color);
+    Page<SanPham> price(Pageable pageable, String priceStart,  String priceEnd);
 
     //price+color
-    Page<SanPham> priceAndFilterColor(Pageable pageable, String priceStart, String priceEnd, String color);
-
-    //priceMin+size
-    Page<SanPham> priceMinAndFilterSize(Pageable pageable, String priceStart, String size);
-
-    //priceMax+size
-    Page<SanPham> priceMaxAndFilterSize(Pageable pageable, String priceEnd, String size);
+    Page<SanPham> priceAndFilterColor(Pageable pageable, String priceStart,  String priceEnd,  List<Integer> color);
 
     //price+size
-    Page<SanPham> priceAndFilterSize(Pageable pageable, String priceStart, String priceEnd, String size);
-
-    //priceMin+color+size
-    Page<SanPham> priceMinAndFilterColorAndSize(Pageable pageable, String priceStart, String color, String size);
-
-    //priceMax+color+size
-    Page<SanPham> priceMaxAndFilterColorAndSize(Pageable pageable, String priceEnd, String color, String size);
+    Page<SanPham> priceAndFilterSize(Pageable pageable, String priceStart,  String priceEnd,  List<String> size);
 
     //price+color+size
-    Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, String priceStart, String priceEnd, String color, String size);
+    Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, String priceStart,  String priceEnd,  List<Integer> color,  List<String> size);
 
     //color
-    Page<SanPham> filterColor(Pageable pageable, List<Integer> color);
+    Page<SanPham> filterColor(Pageable pageable,  List<Integer> color);
 
     //size
-    Page<SanPham> filterSize(Pageable pageable, List<String> size);
+    Page<SanPham> filterSize(Pageable pageable,  List<String> size);
 
     //color+size
-    Page<SanPham> filterColorAndSize(Pageable pageable, List<Integer> color, List<String> size);
-
-    Page<SanPham> searchfilterColorAndSizeIn(Pageable pageable, String keyword, List<Integer> color, List<String> size);
+    Page<SanPham> filterColorAndSize(Pageable pageable,  List<Integer> color,  List<String> size);
+    
+    Integer priceMax();
 
 }

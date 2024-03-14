@@ -17,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,13 +62,15 @@ public class ControllerSanPham {
         Matcher matcher = pattern.matcher(String.valueOf(sp.getDonGia()));
 
         System.out.println(sp.getDonGia());
-
-        for (SanPham sanPham : sv.getAll()
-        ) {
-            sp.setMaSP("SP" + sv.getAll().size());
-            if (sp.getMaSP().equalsIgnoreCase(sanPham.getMaSP())) {
-                sp.setMaSP("SP" + (sv.getAll().size() + 1));
-            }
+        List<SanPham> list = sv.getAll();
+        List<Integer> integerList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            int index = Integer.parseInt(list.get(i).getMaSP().substring(2));
+            integerList.add(index);
+        }
+        Optional<Integer> maxNumber = integerList.stream().max(Integer::compareTo);
+        if (maxNumber.isPresent()){
+            sp.setMaSP("SP" + maxNumber.get() +1);
         }
         boolean isValid = true;
         sp.setNgayTao(LocalDateTime.now());

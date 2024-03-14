@@ -29,9 +29,16 @@ public class SanPhamRestController {
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/page/{pageNumber}/{keyWord}", method = RequestMethod.POST)
+    @RequestMapping(value = "/priceMax", method = RequestMethod.GET)
+    private ResponseEntity<?> PriceMax() {
+        return new ResponseEntity<>(service.priceMax(), HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/page/{pageNumber}/{priceStart}/{priceEnd}", method = RequestMethod.POST)
     private ResponseEntity<?> paginationAndFilter(@PathVariable("pageNumber") String pageNumber,
-                                                  @PathVariable("keyWord") String keyWord,
+                                                  @PathVariable("priceStart") String priceStart,
+                                                  @PathVariable("priceEnd") String priceEnd,
                                                   @RequestBody FilterRequest filterRequest,
                                                   @RequestParam("sort") int sort) {
         Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 8, Sort.by("ngayTao").descending());
@@ -68,34 +75,53 @@ public class SanPhamRestController {
         } else {
             System.out.println("sort default");
         }
-        if (keyWord.equals("null") && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)) {
+        //default
+        if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)) {
             page = service.pageClient(pageable);
             System.out.println("Case Default");
-
-        } else if (!keyWord.equals("null") && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)) {
-            page = service.search(pageable, keyWord);
-            System.out.println(keyWord);
-            System.out.println("Case " + 1);
-
-        } else if (keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
-
+        }
+        //color
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
             page = service.filterColor(pageable, filterRequest.getListColors());
             System.out.println("Case " + 2);
-        } else if (keyWord.equals("null") && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
-
+        }
+        //size
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
             page = service.filterSize(pageable, filterRequest.getListSizes());
             System.out.println("Case " + 3);
-        } else if (keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
-
+        }
+        //color+size
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
             page = service.filterColorAndSize(pageable, filterRequest.getListColors(), filterRequest.getListSizes());
             System.out.println("Case " + 4);
-        } else if (!keyWord.equals("null") && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
-
-            page = service.searchfilterColorAndSizeIn(pageable, keyWord, filterRequest.getListColors(), filterRequest.getListSizes());
+        }
+        //price
+        else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() == null) {
+            page = service.price(pageable, priceStart, priceEnd);
             System.out.println("Case " + 5);
+        }
+        //price+color
+        else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
+            page = service.priceAndFilterColor(pageable, priceStart, priceEnd, filterRequest.getListColors());
+            System.out.println("Case " + 6);
+        }
+        //price+size
+        else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
+            page = service.priceAndFilterSize(pageable, priceStart, priceEnd, filterRequest.getListSizes());
+            System.out.println("Case " + 7);
+        }
+        //price+color+size
+        else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
+            page = service.priceAndFilterColorAndSize(pageable, priceStart, priceEnd, filterRequest.getListColors(), filterRequest.getListSizes());
+            System.out.println("Case " + 8);
         } else {
             System.out.println("Error??");
         }
+
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
