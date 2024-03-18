@@ -113,6 +113,11 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public SanPham detail(Long id) {
+        return rp.detail(id);
+    }
+
+    @Override
     public Optional<SanPham> getById(Long id) {
         return rp.findById(id);
     }

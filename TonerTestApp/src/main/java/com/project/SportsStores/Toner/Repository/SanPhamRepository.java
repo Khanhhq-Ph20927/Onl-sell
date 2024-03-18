@@ -132,6 +132,10 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
     Page<SanPham> filterColorAndSize(Pageable pageable, @Param("color") List<Integer> color, @Param("size") List<String> size);
 
     //Price max
-    @Query("Select MAX(sp.donGia) FROM SanPham sp")
+    @Query("Select MAX(sp.donGia) FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1")
     Integer priceMax();
+
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE sp.id=:id")
+    SanPham detail(@Param("id") Long id);
+
 }

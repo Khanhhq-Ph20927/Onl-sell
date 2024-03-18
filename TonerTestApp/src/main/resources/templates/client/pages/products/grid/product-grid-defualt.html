@@ -327,60 +327,6 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
-<div
-        class="modal fade"
-        id="subscribeModal"
-        tabindex="-1"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-body p-0 bg-info-subtle rounded">
-                <div class="row g-0 align-items-center">
-                    <div class="col-lg-6">
-                        <div class="p-4 h-100">
-                  <span class="badge bg-info-subtle text-info fs-13"
-                  >GET 10% SALE OFF</span
-                  >
-                            <h2 class="display-6 mt-2 mb-3">
-                                Subscribe & Get <b>50% Special</b> Discount On Email
-                            </h2>
-                            <p class="mb-4 pb-lg-2 fs-16">
-                                Join our newsletter to receive the latest updates and
-                                promotion
-                            </p>
-                            <form action="#!">
-                                <div class="position-relative ecommerce-subscript">
-                                    <input
-                                            type="email"
-                                            class="form-control rounded-pill border-0"
-                                            placeholder="Enter your email"
-                                    />
-                                    <button
-                                            type="submit"
-                                            class="btn btn-info btn-hover rounded-pill"
-                                    >
-                                        Subscript
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="p-4 pb-0">
-                            <img
-                                    src="../assets/images/subscribe.png"
-                                    alt=""
-                                    class="img-fluid"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- end modal -->
 <div th:replace="client/fragments/chat::chat"></div>
 <section class="section pb-0 mt-4">
@@ -1014,8 +960,10 @@
                                     style="max-height: 200px;max-width: 100%;" class="mx-auto d-block rounded-2">
                                 <div class="action vstack gap-2">
                                     <button class="btn btn-danger avatar-xs p-0 btn-soft-warning custom-toggle product-action "
-                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-heart-line"></i></span>
+                                            data-bs-toggle="button" ><span class="icon-on"><i class="ri-heart-line"></i></span>
                                         <span class="icon-off"><i class="ri-heart-fill"></i></span></button>
+                                         <a class="btn btn-danger avatar-xs p-0 btn-soft-info custom-toggle product-action" href="/product/detail/${list[i].id}">
+                                         <span><i class="ri-eye-2-line"></i></span></a>
                                 </div>
                                 <div class="avatar-xs label">
                                     <div class="avatar-title bg-danger rounded-circle fs-11">25%</div>
@@ -1426,6 +1374,8 @@
                                     <button class="btn btn-danger avatar-xs p-0 btn-soft-warning custom-toggle product-action "
                                             data-bs-toggle="button"><span class="icon-on"><i class="ri-heart-line"></i></span>
                                         <span class="icon-off"><i class="ri-heart-fill"></i></span></button>
+                                           <a class="btn btn-danger avatar-xs p-0 btn-soft-info custom-toggle product-action" href="/product/detail/${list[i].id}">
+                                         <span><i class="ri-eye-2-line"></i></span></a>
                                 </div>
                                 <div class="avatar-xs label">
                                     <div class="avatar-title bg-danger rounded-circle fs-11">25%</div>
@@ -1609,7 +1559,6 @@
             });
         });
     }
-
 </script>
 </body>
 </html>

@@ -71,4 +71,5 @@ public interface SanPhamService {
     
     Integer priceMax();
 
+    SanPham detail(Long id);
 }
