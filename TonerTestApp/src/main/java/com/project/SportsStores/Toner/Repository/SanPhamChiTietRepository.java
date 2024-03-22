@@ -57,5 +57,4 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("select s from SanPhamChiTiet s where s.sp.id=:id and s.ms.id =:ms and s.size =:size ")
     SanPhamChiTiet findIdProductByColorAndSize(@Param("id") String id,@Param("ms") String ms,@Param("size") String size);
 
-
 }

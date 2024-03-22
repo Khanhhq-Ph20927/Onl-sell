@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ClientUI {
     @RequestMapping("/theme")
     public String testTheme() {
-        return "client/Test-theme";
+        return "client/test-theme";
     }
 
     @RequestMapping("")

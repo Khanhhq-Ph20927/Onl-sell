@@ -3,8 +3,7 @@
 <head th:replace="client/fragments/head::head"></head>
 <body>
 <div th:replace="client/fragments/header::header"></div>
-<!--cart -->
-<div th:replace="client/fragments/cart::cart"></div>
+
 <!-- Modal -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -149,7 +148,7 @@
     </div><!--end container-->
 </section>
 
-<section class="section">
+<section class="section" id="productDetails">
     <div class="container">
         <div class="row gx-2">
             <div class="col-lg-6">
@@ -217,11 +216,11 @@
                     <div class="col-lg-12">
                         <div class="mt-3">
                             <div class="hstack gap-2">
-                                <button type="button" class="btn btn-success btn-hover w-100">
-                                    Buy Now
+                                <button type="button" class="btn btn-success btn-hover w-100"><i
+                                        class="bi bi-bag align-baseline me-1"></i>Buy Now
                                 </button>
-                                <button type="button" class="btn btn-primary btn-hover w-100">
-                                    <i class="bi bi-cart2 me-2"></i>Add To Cart
+                                <button type="button" class="btn btn-primary btn-hover w-100" onclick="AddToCart()"><i
+                                        class="bi bi-cart2 me-2"></i>Add To Cart
                                 </button>
                             </div>
                         </div>
@@ -231,56 +230,42 @@
             <div class="col-lg-5 ms-auto">
                 <div class="ecommerce-product-widgets mt-4 mt-lg-0">
                     <div class="mb-4">
+                        <!-- Nội dung sản phẩm -->
+                        <!-- Hidden-->
+                        <input type="hidden" id="productId" th:value="${sanPham.id}">
+                        <!-- Hidden-->
                         <h4 class="lh-base mb-1" th:text="${sanPham.tenSP}"></h4>
                         <h5 class="fs-24 mb-4 text-secondary" th:text="${#numbers.formatCurrency(sanPham.donGia)}"></h5>
                     </div>
                     <div class="d-flex align-items-center mb-4">
-                        <div class="col-md-6">
-                            <h6 class="fs-14 fw-medium text-muted">Colors: </h6>
-                            <ul class="clothe-colors list-unstyled hstack gap-1 mb-0 flex-wrap ms-2" id="Find-Color">
-                                <li>
-                                    <input type="radio" name="sizes" id="product-color-2">
-                                    <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                           for="product-color-2"></label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="sizes" id="product-color-3">
-                                    <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                           for="product-color-3"></label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="sizes" id="product-color-4" checked>
-                                    <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                           for="product-color-4"></label>
-                                </li>
-                            </ul>
+                        <div class="col-md-12 row">
+                            <h6 class="fs-14 fw-medium text-muted">Số lượng: <span
+                                    class="fs-14 fw-medium text-muted" id="Find-Quantity"></span></h6>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="col-md-12">
+                            <h6 class="fs-14 fw-medium text-muted">Màu sắc: </h6>
+                            <ul class="clothe-colors list-unstyled hstack gap-1 mb-0 flex-wrap" id="Find-Color"></ul>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="col-md-12">
                             <div>
                                 <h6 class="fs-14 fw-medium text-muted">Sizes:</h6>
-                                <ul class="clothe-size list-unstyled hstack gap-2 mb-0 flex-wrap" id="Find-Size" >
-                                    <li><input type="radio" name="sizes7" id="product-color-72"> <label
-                                            class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle"
-                                            for="product-color-72">s</label></li>
-                                    <li><input type="radio" name="sizes7" id="product-color-73"> <label
-                                            class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle"
-                                            for="product-color-73">m</label></li>
-                                    <li><input type="radio" name="sizes7" checked id="product-color-74"> <label
-                                            class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle"
-                                            for="product-color-74">l</label></li>
-                                    <li><input type="radio" name="sizes7" id="product-color-75"> <label
-                                            class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle"
-                                            for="product-color-75">xl</label></li>
-                                </ul>
+                                <ul class="clothe-size list-unstyled hstack gap-1 mb-0 flex-wrap" id="Find-Size"></ul>
                             </div>
                         </div>
                     </div>
-                    <div class="gy-3 d-flex align-items-center mb-4">
-                        <h5 class="fs-15 mb-0">Quantity:</h5>
+                    <div class="gy-3 d-flex align-items-center mb-4" id="input-step-quantity">
+                        <h5 class="fs-15 mb-0">Số lượng mua:</h5>
                         <div class="input-step ms-2">
-                            <button type="button" class="minus">–</button>
-                            <input type="number" class="product-quantity1" value="1" min="0" max="100" readonly="">
-                            <button type="button" class="plus">+</button>
+                            <button type="button" class="minus" id="minus" disabled>–</button>
+                            <input type="number" class="cart-quantity" disabled onchange="inputQuantity()"
+                                   id="cart-quantity"
+                                   value="1"
+                                   min="" max="">
+                            <button type="button" class="plus" id="plus" disabled>+</button>
                         </div>
                     </div>
                 </div>
@@ -383,12 +368,353 @@
 <div th:replace="client/fragments/footer::footer"></div>
 <div th:replace="client/fragments/script::script"></div>
 <script th:src="@{/assets/js/frontend/product-details.init.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <script>
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+    var selectedProductDetailId;
+    var selectedProductDetailColor;
+    var selectedProductDetailSize;
+    var totalQuantity;
+    var quantityAddToCart = 1;
     window.onload = function () {
+        loadProductDetails();
+    }
+
+    function loadProductDetails() {
+        // Lấy id sản phẩm từ phần tử HTML sử dụng Thymeleaf
+        var productIdInput = document.getElementById("productId");
+        if (productIdInput) {
+            var productId = productIdInput.value;
+            // Gọi hàm tải màu sắc và kích thước với id sản phẩm đã lấy được
+            loadColor(parseInt(productId));
+            loadSize(parseInt(productId));
+            loadQuantity(parseInt(productId));
+        }
+    }
+
+    async function loadColor(productId) {
+        var color = '';
+        var labelColor = '';
+        var cssStyle = '';
+        var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
+        const responseDetailPD = await fetch(urlDetailPD, {
+            method: 'GET'
+        });
+        const data = await responseDetailPD.json();
+        let resultDetailColor = data.filter((product, index, self) =>
+            index === self.findIndex((p) => (
+                p.ms.id === product.ms.id
+            ))
+        );
+        // Sort colors based on ms.id
+        resultDetailColor.sort((a, b) => a.ms.id - b.ms.id);
+        for (let i = 0; i < resultDetailColor.length; i++) {
+            if (productId === resultDetailColor[i].sp.id) {
+                if (resultDetailColor[i].ms.id === 1) {
+                    labelColor = "btn-dark";
+                    cssStyle = "";
+                } else if (resultDetailColor[i].ms.id === 2) {
+                    cssStyle = "";
+                    labelColor = "btn-light";
+                } else if (resultDetailColor[i].ms.id === 3) {
+                    cssStyle = "";
+                    labelColor = "btn-danger";
+                } else if (resultDetailColor[i].ms.id === 4) {
+                    labelColor = "btn-secondary";
+                    cssStyle = "style=\"background-color: rgb(169,169,169); border: none;\"";
+                } else if (resultDetailColor[i].ms.id === 5) {
+                    cssStyle = "";
+                    labelColor = "btn-success";
+                } else if (resultDetailColor[i].ms.id === 6) {
+                    cssStyle = "";
+                    labelColor = "btn-secondary";
+                } else if (resultDetailColor[i].ms.id === 7) {
+                    cssStyle = "";
+                    labelColor = "btn-primary";
+                } else {
+                    cssStyle = "";
+                    labelColor = "btn-warning";
+                }
+                color += `<li><input onclick="chooseProductColor(${productId})" type="radio" name="colors" id="product-color-${resultDetailColor[i].ms.id}">
+                          <label class="avatar-xs btn ${labelColor} p-0 d-flex align-items-center justify-content-center rounded-circle" ${cssStyle} for="product-color-${resultDetailColor[i].ms.id}" ></label></li>`;
+            }
+        }
+        document.getElementById("Find-Color").innerHTML = color;
+    }
+
+    async function loadSize(productId) {
+        var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
+        const responseDetailPD = await fetch(urlDetailPD, {
+            method: 'GET'
+        });
+        const data = await responseDetailPD.json();
+        var size = '';
+        let resultDetailSize = data.filter((product, index, self) =>
+            index === self.findIndex((p) => (
+                p.size === product.size
+            ))
+        );
+        // Sort sizes based on size
+        resultDetailSize.sort((a, b) => a.size.localeCompare(b.size));
+        for (let i = 0; i < resultDetailSize.length; i++) {
+            if (productId === resultDetailSize[i].sp.id) {
+                size += `<li id="li-size-${resultDetailSize[i].size}"><input onclick="chooseProductSize(${productId})" disabled type="radio" name="sizes" id="product-size-${resultDetailSize[i].size}">
+                         <label class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${resultDetailSize[i].size}">${resultDetailSize[i].size}</label></li>`;
+            }
+        }
+        document.getElementById("Find-Size").innerHTML = size;
+    }
+
+    async function loadQuantity(productId) {
+        var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
+        const responseDetailPD = await fetch(urlDetailPD, {
+            method: 'GET'
+        });
+
+        const data = await responseDetailPD.json();
+        let quantity = 0;
+        for (let i = 0; i < data.length; i++) {
+            quantity += data[i].soLuong;
+        }
+        totalQuantity = quantity;
+        document.getElementById("Find-Quantity").innerHTML = totalQuantity;
+    }
+
+    async function chooseProductColor(idPD) {
+        // Lấy ra input radio đã được chọn
+        var selectedColorInput = document.querySelector('input[name="colors"]:checked');
+        if (selectedColorInput) {
+            // Lấy giá trị id của màu sắc đã chọn
+            var selectedColorId = selectedColorInput.id.split('-')[2]; // Lấy phần số cuối cùng sau dấu "-"
+            var arrSize = [];
+            let quantity = 0;
+            var url = "/api/client/product_detail/detail/" + idPD + "/" + selectedColorId;
+            const response = await fetch(url, {
+                method: 'GET'
+            });
+            var result = await response.json();
+            var selectedSizeInput = document.querySelectorAll('input[name="sizes"]');
+            var liSize = document.querySelectorAll('#Find-Size li');
+            if (selectedProductDetailColor === undefined) {
+                selectedProductDetailColor = selectedColorId;
+                for (let i = 0; i < result.length; i++) {
+                    quantity += result[i].soLuong;
+                    selectedSizeInput.forEach(function (inputs) {
+                        var a = inputs.id.split('-')[2].toLowerCase();
+                        var b = result[i].size.toLowerCase();
+                        if (b === a) {
+                            inputs.removeAttribute('disabled');
+                            arrSize.push(inputs.id.split('-')[2]);
+                        }
+                    });
+                }
+
+            } else {
+                if (selectedProductDetailColor !== selectedColorId) {
+                    arrSize = [];
+                    selectedProductDetailColor = selectedColorId;
+                    selectedProductDetailSize = undefined;
+                    for (i = 0; i < result.length; i++) {
+                        quantity += result[i].soLuong;
+                        selectedSizeInput.forEach(function (inputs) {
+                            var a = inputs.id.split('-')[2].toLowerCase();
+                            var b = result[i].size.toLowerCase();
+                            if (b === a) {
+                                inputs.checked = false;
+                                inputs.removeAttribute('disabled');
+                                arrSize.push(inputs.id.split('-')[2]);
+                            }
+                        });
+                    }
+                } else {
+                    var radioInputs = document.querySelectorAll('input[type="radio"]');
+                    var idToRemove = "product-color-" + selectedColorId;
+                    for (let i = 0; i < radioInputs.length; i++) {
+                        quantity += result[i].soLuong;
+                        if (radioInputs[i].id.split('-')[2] === idToRemove) {
+                            for (let j = 0; j < radioInputs.length; j++) {
+                                radioInputs[j].checked = false;
+                            }
+                            break;
+                        }
+                    }
+                    selectedProductDetailColor = selectedColorId;
+                    arrSize = [];
+                    for (i = 0; i < result.length; i++) {
+                        quantity += result[i].soLuong;
+                        selectedSizeInput.forEach(function (inputs) {
+                            var a = inputs.id.split('-')[2].toLowerCase();
+                            var b = result[i].size.toLowerCase();
+                            if (b === a) {
+                                inputs.checked = false;
+                                inputs.removeAttribute('disabled');
+                                arrSize.push(inputs.id.split('-')[2]);
+                            }
+                        });
+
+                    }
+                }
+            }
+            liSize.forEach(function (li) {
+                var a = li.id.split('-')[2].toLowerCase();
+                var matchFound = false;
+                for (i = 0; i < arrSize.length; i++) {
+                    var b = arrSize[i].toLowerCase();
+                    if (a === b) {
+                        matchFound = true;
+                        break;
+                    }
+                }
+                if (!matchFound) {
+                    li.style.display = 'none';
+                } else {
+                    li.style.display = 'block';
+                }
+            });
+            totalQuantity = quantity;
+            document.getElementById("Find-Quantity").innerHTML = totalQuantity;
+            console.log("Selected color ID:", selectedColorId);
+            // Thực hiện các xử lý khác nếu cần
+        } else {
+            console.log("No color selected");
+            // Xử lý khi không có màu nào được chọn
+        }
 
     }
 
-    async function loadColorAndSize() {
+    async function chooseProductSize(idPD) {
+        // Lấy ra input radio đã được chọn
+        var selectedSizeInput = document.querySelector('input[name="sizes"]:checked');
+        if (selectedSizeInput) {
+            // Lấy giá trị size đã chọn
+            var selectedSize = selectedSizeInput.id.split('-')[2];// Lấy phần số cuối cùng sau dấu "-"
+            console.log("Selected size:", selectedSize);
+            selectedProductDetailSize = selectedSize;
+            var url = "/api/client/product_detail/detailSL/" + idPD + "/" + selectedProductDetailColor + "/" + selectedProductDetailSize;
+            const response = await fetch(url, {
+                method: 'GET'
+            });
+            var result = await response.json();
+            totalQuantity = result.soLuong;
+            document.getElementById("Find-Quantity").innerHTML = totalQuantity;
+            var minus = document.getElementById("minus");
+            var input = document.getElementById('cart-quantity');
+            var plus = document.getElementById("plus");
+            if (selectedProductDetailColor !== undefined && selectedProductDetailSize !== undefined) {
+                minus.removeAttribute("disabled");
+                input.removeAttribute("disabled");
+                plus.removeAttribute("disabled");
+            }
+            // Thực hiện các xử lý khác nếu cần
+        } else {
+            console.log("No size selected");
+            // Xử lý khi không có size nào được chọn
+        }
+    }
+
+    async function inputQuantity() {
+        var productId = document.getElementById("productId").value;
+        var input = document.getElementById('cart-quantity');
+        var url = "/api/client/product_detail/detailSL/" + productId + "/" + selectedProductDetailColor + "/" + selectedProductDetailSize;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        input.min = 1;
+        input.max = result.soLuong;
+
+        if (input.value > input.max) {
+            (async () => {
+                await Toast.fire({
+                    icon: "warning",
+                    title: "Số lượng không đủ !",
+                });
+            })();
+        } else if (input.value < input.min) {
+            (async () => {
+                await Toast.fire({
+                    icon: "warning",
+                    title: "Số lượng không đúng !",
+                });
+            })();
+        } else {
+            quantityAddToCart = input.value;
+        }
+    }
+
+    async function AddToCart() {
+        var productIdInput = document.getElementById("productId");
+        if (productIdInput) {
+            var productId = productIdInput.value;
+            let product = {};
+            if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Màu Và Size !",
+                    });
+                })();
+            } else if (selectedProductDetailColor === undefined) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Màu !",
+                    });
+                })();
+            } else if (selectedProductDetailSize === undefined) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Màu !",
+                    });
+                })();
+            } else {
+                product = {ms: selectedProductDetailColor, size: selectedProductDetailSize, sl: quantityAddToCart};
+                var url = '/api/client/cart_detail/addByProductDetailPage/' + productId;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(product)
+                });
+                console.log(response);
+                if (response.status === 200) {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "success",
+                            title: "Thêm thành công!",
+                        });
+                    })();
+                    selectedProductDetailColor = undefined;
+                    selectedProductDetailSize = undefined;
+                    quantityAddToCart = 1;
+                } else {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "error",
+                            title: "Thêm thất bại!",
+                        });
+                    })();
+                }
+            }
+        }
+
+    }
+
+    async function loadDescription() {
 
     }
 </script>

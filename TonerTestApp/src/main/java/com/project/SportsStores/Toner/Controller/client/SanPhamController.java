@@ -1,5 +1,6 @@
 package com.project.SportsStores.Toner.Controller.client;
 
+import com.project.SportsStores.Toner.Service.MauSacService;
 import com.project.SportsStores.Toner.Service.SanPhamChiTietService;
 import com.project.SportsStores.Toner.Service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class SanPhamController {
     SanPhamService service;
     @Autowired
     SanPhamChiTietService chiTietService;
+    @Autowired
+    MauSacService mauSacService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getAll() {
@@ -25,7 +28,7 @@ public class SanPhamController {
     }
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable("id") Long id,Model model) {
+    public String detail(@PathVariable("id") Long id, Model model) {
         model.addAttribute("sanPham", service.detail(id));
         return "client/pages/products/product-details";
     }

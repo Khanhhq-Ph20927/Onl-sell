@@ -21,7 +21,7 @@ public class SanPhamChiTietRestController {
         return new ResponseEntity<>(sv.getAll(), HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    //    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 //    private ResponseEntity<?> getProductDetailById(@PathVariable("id") String id) {
 //        return ResponseEntity.ok().body(sv.getById(id));
 //    }
@@ -29,9 +29,15 @@ public class SanPhamChiTietRestController {
     private ResponseEntity<?> getByid(@PathVariable("id") String id) {
         return ResponseEntity.ok().body(sv.getListByIdSp(id));
     }
+
     @RequestMapping(value = "/detail/{id}/{color}", method = RequestMethod.GET)
-    private ResponseEntity<?> findIdProductAndColor(@PathVariable("id") String id,@PathVariable("color") String color) {
-        return ResponseEntity.ok().body(sv.findListProductByColor(id,color));
+    private ResponseEntity<?> findIdProductAndColor(@PathVariable("id") String id, @PathVariable("color") String color) {
+        return ResponseEntity.ok().body(sv.findListProductByColor(id, color));
+    }
+
+    @RequestMapping(value = "/detailSL/{id}/{color}/{size}", method = RequestMethod.GET)
+    private ResponseEntity<?> findIdProductAndColorAndSize(@PathVariable("id") String id, @PathVariable("color") String color, @PathVariable("size") String size) {
+        return ResponseEntity.ok().body(sv.findIdProductByColorAndSize(id, color, size));
     }
 
 }
